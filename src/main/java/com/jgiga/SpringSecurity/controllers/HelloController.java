@@ -1,6 +1,9 @@
 package com.jgiga.SpringSecurity.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -9,8 +12,8 @@ public class HelloController {
     
 
     @GetMapping("/")
-    public String getHelloString () {
-        return "Hola g__john";
+    public String getHelloString (HttpServletRequest httpServletRequest) {
+        return "Hi, g__john - "+ httpServletRequest.getSession().getId();
     }
     
     
