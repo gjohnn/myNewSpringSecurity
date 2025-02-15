@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.jgiga.SpringSecurity.services.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -29,58 +31,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        // Customizer<CsrfConfigurer<HttpSecurity>> custCsrf = new
-        // Customizer<CsrfConfigurer<HttpSecurity>>() {
-        // @Override
-        // public void customize(CsrfConfigurer<HttpSecurity> customizer) {
-        // customizer.disable();
-        // }
-        // };
-        // same as
-        // .csrf(customizer -> customizer.disable())
-        http
-                .csrf(customizer -> customizer.disable())
-                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
+        return http.csrf(customizer -> customizer.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/students").authenticated() // 🔒
+                        .anyRequest().authenticated() // Proteger el resto
+                )
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 
-        // http.formLogin(Customizer.withDefaults());
-
-        // // For postman
-        // http.httpBasic(Customizer.withDefaults());
-
-        return http.build();
-    }
-
-    // Can not user withDefaultPasswordEncoder() DEPRECATED instead we use this
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-
-        UserDetails user01 = User.builder()
-                .username("g__john")
-                .password(passwordEncoder.encode("papu1234"))
-                .roles("USER")
-                .build();
-
-        UserDetails user02 = User.builder()
-                .username("gjohn")
-                .password(passwordEncoder.encode("papu1234"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user01, user02);
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12)); // Asegurar que usa BCrypt
         return provider;
     }
 

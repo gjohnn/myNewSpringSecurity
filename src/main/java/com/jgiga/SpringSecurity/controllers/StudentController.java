@@ -7,6 +7,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jgiga.SpringSecurity.models.Student;
@@ -14,6 +15,7 @@ import com.jgiga.SpringSecurity.models.Student;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
 
     private List<Student> students = new ArrayList<>(
@@ -21,7 +23,7 @@ public class StudentController {
                     new Student(2, "nashe", 20),
                     new Student(3, "sergio", 80)));
 
-    @GetMapping("/students")
+    @GetMapping("")
     public List<Student> getAll() {
         return students;
     }
@@ -32,7 +34,7 @@ public class StudentController {
         return (CsrfToken) request.getAttribute("_csrf");
     }
 
-    @PostMapping("/students")
+    @PostMapping("")
     public List<Student> createOne(@RequestBody Student newStudent) {
         students.add(newStudent);
         return students;
