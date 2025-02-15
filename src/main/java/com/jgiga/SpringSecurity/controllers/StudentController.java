@@ -13,7 +13,6 @@ import com.jgiga.SpringSecurity.models.Student;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
 @RestController
 public class StudentController {
 
@@ -28,7 +27,7 @@ public class StudentController {
     }
 
     @GetMapping("/csrf-token")
-    public CsrfToken csrfToken(HttpServletRequest request){
+    public CsrfToken csrfToken(HttpServletRequest request) {
 
         return (CsrfToken) request.getAttribute("_csrf");
     }
