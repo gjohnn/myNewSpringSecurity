@@ -1,15 +1,13 @@
--- Activar la extensión pgcrypto para usar funciones de encriptación
+-- Activate pgcrypto extension
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- Agregar un índice único en la columna 'username' para permitir ON CONFLICT
-
--- Verificar si la tabla está vacía antes de insertar
+-- Verify if table already exists
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM users LIMIT 1) THEN
     ALTER TABLE users ADD CONSTRAINT users_username_unique UNIQUE (username);
 
-        -- Insertar 10,000 usuarios con contraseñas cifradas
+        -- Insert 10,000 users 
         INSERT INTO users (id, username, password)
         SELECT gen_random_uuid(), 
                'user' || generate_series,
