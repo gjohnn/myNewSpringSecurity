@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jgiga.SpringSecurity.config.Auth.JWT.JWTService;
+import com.jgiga.SpringSecurity.config.Auth.Roles.Roles;
 import com.jgiga.SpringSecurity.models.Users;
 import com.jgiga.SpringSecurity.repositories.UserRepository;
 
@@ -29,6 +30,7 @@ public class UserService {
         }
 
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setRoles(Roles.USER);
         return userRepository.save(user);
     }
 

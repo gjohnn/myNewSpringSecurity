@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.jgiga.SpringSecurity.config.Auth.Roles.Roles;
 import com.jgiga.SpringSecurity.models.Users;
 import com.jgiga.SpringSecurity.repositories.UserRepository;
 
@@ -24,8 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         return User.withUsername(user.getUsername())
-                .password(user.getPassword()) // 🔥 Asegurar que se usa el password hasheado
-                .roles("USER") // Puedes cambiarlo si tienes roles
+                .password(user.getPassword())
+                .roles(Roles.USER.name())
                 .build();
     }
 

@@ -2,7 +2,11 @@ package com.jgiga.SpringSecurity.models;
 
 import java.util.UUID;
 
+import com.jgiga.SpringSecurity.config.Auth.Roles.Roles;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +31,9 @@ public class Users {
     private UUID id;
     private String username;
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Roles roles;
 
     
     @Override
