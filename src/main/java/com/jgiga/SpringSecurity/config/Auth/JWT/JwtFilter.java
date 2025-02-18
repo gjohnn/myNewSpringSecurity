@@ -30,6 +30,11 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     ApplicationContext context;
 
+    /*
+     * main function that processes the JWT token from the request header. The other
+     * methods and classes used within this function are part of the Spring Security
+     * framework and the custom JWT service.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
