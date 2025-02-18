@@ -25,6 +25,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+<<<<<<< HEAD
+=======
+        // Cargar el archivo SQL desde el classpath
+>>>>>>> a14c543 (small changes)
         ClassPathResource resource = new ClassPathResource("setup_users.sql");
         try {
 
