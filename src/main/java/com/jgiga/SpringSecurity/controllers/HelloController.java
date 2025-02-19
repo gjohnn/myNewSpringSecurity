@@ -10,12 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class HelloController {
     
-
     @GetMapping("/")
     public String getHelloString (HttpServletRequest httpServletRequest) {
-        return "Hi, g__john - "+ httpServletRequest.getSession().getId();
+        return "Hi - "+ httpServletRequest.getSession().getId();
     }
-    
-    
-    
+
 }

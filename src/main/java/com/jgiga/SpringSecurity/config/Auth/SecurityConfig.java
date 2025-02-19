@@ -10,10 +10,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,33 +25,37 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
+    // This method configures the security filter chain for HTTP requests.
+    // It disables CSRF protection, allows unrestricted access to /auth/** endpoints,
+    // requires authentication for all other requests, uses HTTP Basic authentication,
+    // sets the session management policy to stateless, and adds the JWT filter before the UsernamePasswordAuthenticationFilter.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http.csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated() // 🔒
                 )
                 .httpBasic(Customizer.withDefaults())
-
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
+    // This method configures the authentication provider.
+    // It sets the user details service and the password encoder to BCrypt.
     @Bean
     public AuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(12)); // Asegurar que usa BCrypt
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12)); // Ensure it uses BCrypt
         return provider;
     }
 
+    // This method configures the authentication manager.
+    // It retrieves the authentication manager from the authentication configuration.
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }
