@@ -1,4 +1,4 @@
-package com.jgiga.SpringSecurity.controllers;
+package com.jgiga.SpringSecurity;
 
 import java.util.ArrayList;
 import java.util.List;
