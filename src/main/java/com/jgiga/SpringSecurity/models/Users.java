@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.jgiga.SpringSecurity.config.Auth.Roles.Roles;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Table(name = "users", indexes = {
-    @Index(name = "idx_username", columnList = "username")
+        @Index(name = "idx_username", columnList = "username")
 })
 @Data
 public class Users {
@@ -31,17 +32,20 @@ public class Users {
     private UUID id;
     private String username;
     private String password;
-
     @Enumerated(EnumType.STRING)
     private Roles roles;
 
-    
+    // User data
+
+    @Column(unique = true, nullable = true)
+    private String email;
+
     @Override
     public String toString() {
         return "Users{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", roles='" + roles + '\'' +
                 '}';
     }
 }
